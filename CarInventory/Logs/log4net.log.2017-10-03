@@ -1,0 +1,5 @@
+2017-10-03 23:50:04,090 INFO CarInventory.Controllers.AccountController - Action Index has been fired.
+2017-10-03 23:57:36,140 INFO CarInventory.Controllers.AccountController - System.ArithmeticException: dividing a number by 5 is not allowed in this program
+   at CarInventory.Controllers.AccountController.Index() in C:\Users\VIJAY AHIR\Documents\Visual Studio 2015\Projects\CarInventory\CarInventory\CarInventory\Controllers\AccountController.cs:line 18
+2017-10-03 23:58:21,626 INFO CarInventory.Controllers.AccountController - System.ArithmeticException: dividing a number by 5 is not allowed in this program
+   at CarInventory.Controllers.AccountController.Index() in C:\Users\VIJAY AHIR\Documents\Visual Studio 2015\Projects\CarInventory\CarInventory\CarInventory\Controllers\AccountController.cs:line 18
