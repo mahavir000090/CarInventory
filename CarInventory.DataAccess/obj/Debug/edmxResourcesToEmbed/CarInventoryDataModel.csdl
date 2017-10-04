@@ -24,6 +24,7 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
     <NavigationProperty Name="Cars" Relationship="Self.FK_Cars_Users" FromRole="Users" ToRole="Cars" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_Cars_Users">
     <End Role="Users" Type="Self.User" Multiplicity="1" />

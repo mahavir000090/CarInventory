@@ -17,6 +17,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="CarInventoryModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />

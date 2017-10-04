@@ -111,6 +111,5 @@ namespace CarInventory.DataAccess.Infrastructure
         }
 
 
-       
     }
 }
