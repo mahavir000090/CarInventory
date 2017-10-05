@@ -6,9 +6,13 @@
 
 <h2>Login</h2>
 
-@using (Html.BeginForm("Login","Account",FormMethod.Post)) 
+@using (Html.BeginForm("Login","Account",FormMethod.Post))
 {
-    
+    if (!String.IsNullOrEmpty(Convert.ToString(TempData["Success"])))
+    {
+        <span style="color:forestgreen;"> @TempData["Success"]</span>
+
+    }
     <div class="form-horizontal">
        
         <hr />
@@ -33,9 +37,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Login" class="btn btn-default" />
-
-                <a href="/Account/Register"> Register</a>
+                <input type="submit" value="Login" class="btn btn-default" /> 
             </div>
         </div>
     </div>

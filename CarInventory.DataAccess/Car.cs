@@ -14,7 +14,7 @@ namespace CarInventory.DataAccess
     
     public partial class Car
     {
-        public long CarId { get; set; }
+        public long Id { get; set; }
         public long UserId { get; set; }
         public string Brand { get; set; }
         public string Model { get; set; }

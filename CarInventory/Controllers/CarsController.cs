@@ -24,30 +24,36 @@ namespace CarInventory.Controllers
 
         // GET: Cars
         public ActionResult Index()
+        { 
+            return View();
+        }
+
+        // GET: Cars
+        public PartialViewResult GetCar()
         {
             var cars = CarRepo.GetAll(); 
-            ViewBag.CarsList = cars.ToList();
-            return View();
-        }
-
-        // GET: Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
+            return PartialView("_CarPartial", cars);
+        } 
+       
         //
         // POST: /Car/Create
 
         [HttpPost]
         public ActionResult Create(Car car)
         {
+            car.UserId = Convert.ToInt64(Session["UserID"]);
             if (ModelState.IsValid)
             {
-                car.UserId = 1;
-
-                CarRepo.Insert(car);
-                return RedirectToAction("Index");
+                car.UserId = Convert.ToInt64(Session["UserID"]);
+                if (car.Id > 0)
+                {
+                    CarRepo.Update(car);
+                }
+                else {
+                    CarRepo.Insert(car);
+                } 
+                var cars = CarRepo.GetAll();
+                return PartialView("_CarPartial", cars);
             }
 
             return View(car);
@@ -60,19 +66,20 @@ namespace CarInventory.Controllers
             {
                 return HttpNotFound();
             }
-            return View(car);
+            return Json( new {Id=car.Id ,Brand = car.Brand, Model = car.Model, Year = car.Year, Price = car.Price, New = car.New }, JsonRequestBehavior.AllowGet);
         }
 
         //
         // POST: /Default1/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(Car car)
+        public ActionResult Delete(Car car)
         {
             if (ModelState.IsValid)
             {
-                CarRepo.Update(car);
-                return RedirectToAction("Index");
+                CarRepo.Delete(car);
+                var cars = CarRepo.GetAll();
+                return PartialView("_CarPartial", cars);
             }
             return View(car);
         }

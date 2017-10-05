@@ -187,8 +187,8 @@
     </Content>
     <Content Include="scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Cars\Create.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Cars\_CarPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

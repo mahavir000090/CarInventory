@@ -8,62 +8,13 @@
 <p>
     <a href="#myModal" role="button" class="btn" data-toggle="modal">Create</a>
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Brand)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Model)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Year)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.New)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </th>
-        <th></th>
-    </tr>
+@if (!String.IsNullOrEmpty(Convert.ToString(TempData["Success"])))
+{
+    <span style="color:forestgreen;"> @TempData["Success"]</span>
 
-@foreach (var item in @ViewBag.CarsList as IEnumerable <CarInventory.DataAccess.Car >) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Brand)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Year)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.New)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.FirstName)
-        </td>
-        <td>
-            <a href="">Edit</a>
-            <a href="">Details</a>
-            <a href="">Delete</a>
-
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.CarId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CarId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CarId })*@
-        </td>
-    </tr>
 }
-
-</table>
+<div id="dvCars">
+</div>
 
 <div class='modal fade' id='myModal' tabindex='-1' role='dialog'
      aria-labelledby='mdl' aria-hidden='true'>
@@ -78,56 +29,136 @@
                     Add New Car
                 </h4>
             </div>
-            <div class='modal-body'>
-                    @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+            @using (Html.BeginForm("", "", FormMethod.Post))
+            {
+                <div class='modal-body'>
+                    <div class="form-group"> 
+                        <div class="col-md-10">
+                            @Html.HiddenFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } }) 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                        </div>
                     </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.New, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.New)
+                                @Html.ValidationMessageFor(model => model.New, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.New, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        <div class="checkbox">
-                            @Html.EditorFor(model => model.New)
-                            @Html.ValidationMessageFor(model => model.New, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Create" class="btn btn-default" />
-                    </div>
+                <div class='modal-footer'>
+                    <input type="button" id="btnCreate" value="Save" class="btn btn-success" />   <button type='button' class='btn btn-danger' data-dismiss='modal'>Close</button>
                 </div>
-            </div>
-            <div class='modal-footer'>
-                <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
-            </div>
+            }
         </div>
     </div>
 </div>
+<script src="~/Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var url = "@Url.Action("Create","Cars")";
+    var Geturl = "@Url.Action("GetCar","Cars")";
+
+    $(document).ready(function () {
+        clearform();
+
+        $.ajax({
+            type: "Get",
+            url: Geturl,
+            contentType: "application/json"
+        }).done(function (res) {
+            $("#dvCars").html(res);
+        });
+
+    });
+
+    $('#btnCreate').click(function () {
+        var model = { Id: $('#Id').val(), Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
+        SaveCarDetails(model);
+    });
+
+
+
+    function EditCar(Id)
+    {
+        console.log(Id);
+        $.ajax({
+            type: "Get",
+            url: "@Url.Action("Edit", "Cars")" + "?Id=" + Id, 
+            contentType: "application/json ; charset=utf-8"
+        }).done(function (response) {
+            //$('#Id').val(response.Id);
+            $('#Brand').val(response.Brand);
+            $('#Model').val(response.Model);
+            $('#Year').val(response.Year);
+            $('#Price').val(response.Price);
+            $('#New').val(response.New);
+            $('#myModal').modal('show');
+        }); 
+    }
+
+    function DeleteCar(Id) {
+        console.log(Id);
+    }
+
+    function clearform()
+    {
+        $('#Brand').val('');
+        $('#Model').val('');
+        $('#Year').val('');
+        $('#Price').val('');
+        $('#New').val('');
+    }
+
+    function SaveCarDetails(model)
+    {
+        $.ajax({
+            type: "Post",
+            url: url,
+            data: JSON.stringify(model),
+            contentType: "application/json ; charset=utf-8"
+        }).done(function (res) {
+            $("#dvCars").html(res);
+            $('#myModal').modal('toggle');
+            clearform();
+        });
+    }
+
+</script>

@@ -12,7 +12,9 @@ namespace CarInventory
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes); 
+            ViewEngines.Engines.Clear(); 
+            ViewEngines.Engines.Add(new RazorViewEngine());
         }
     }
 }

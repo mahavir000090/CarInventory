@@ -54,6 +54,7 @@ namespace CarInventory.Controllers
             if (ModelState.IsValid)
             {
                 UserRepo.Insert(objuser);
+                TempData["Success"] = "Registration has been completed successfully.";
                 return RedirectToAction("Login");
             } 
             return View(objuser);
@@ -69,11 +70,13 @@ namespace CarInventory.Controllers
         public ActionResult Login(LoginViewModel login)
         {
             //check username and password over here
-            var user = string.Empty;
+            var user = UserRepo.GetAll().Where(x=>x.Email.ToLower()==login.Email.ToLower() & x.Password.ToLower() == login.Password.ToLower()).FirstOrDefault();
             if (user!=null)
             {
-                Session["UserName"]= "";
-                FormsAuthentication.SetAuthCookie(user,true); 
+                Session["UserID"]= user.Id;
+                FormsAuthentication.SetAuthCookie(user.Email, false);
+                TempData["Success"] = "User has been logged in successfully.!";
+                return RedirectToAction("Index","Cars");
             } 
             return View();
         }

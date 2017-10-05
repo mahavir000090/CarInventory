@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CarInventory.DataAccess.Car>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.New)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model as IEnumerable<CarInventory.DataAccess.Car>)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Model)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.New)
+            </td>
+
+            <td>
+                <a href="#" onclick="EditCar('@item.Id')" id="edtModel">Edit</a>
+                <a href="#" onclick="DeleteCar(@item.Id)">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>

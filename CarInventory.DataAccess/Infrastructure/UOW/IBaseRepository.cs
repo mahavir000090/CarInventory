@@ -44,7 +44,7 @@ namespace CarInventory.DataAccess.Infrastructure.Contract
         /// <param name="entity">The entity to insert</param>
         /// <param name="userId">The user performing the insert</param>
         /// <returns></returns>
-        int Insert(T entity);
+        Int64 Insert(T entity);
 
         /// <summary>
         /// Updates this entity in the database using it's primary key
@@ -53,7 +53,7 @@ namespace CarInventory.DataAccess.Infrastructure.Contract
         /// <param name="userId">The user performing the update</param>
         void Update(T entity);
 
-      
+
 
         /// <summary>
         /// Deletes this entry fro the database
@@ -62,7 +62,7 @@ namespace CarInventory.DataAccess.Infrastructure.Contract
         /// <param name="entity">The entity to delete</param>
         /// <param name="userId">The user Id who deleted the entity</param>
         /// <returns></returns>
-        int Delete(T entity);
+        Int64 Delete(T entity);
 
         IUnitOfWork UnitOfWork { get; }
 

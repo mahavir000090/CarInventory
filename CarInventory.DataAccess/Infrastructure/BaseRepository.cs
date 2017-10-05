@@ -74,7 +74,7 @@ namespace CarInventory.DataAccess.Infrastructure
             return dbSet.Find(primaryKey) == null ? false : true;
         }
 
-        public virtual int Insert(T entity)
+        public virtual Int64 Insert(T entity)
         {
            dynamic obj= dbSet.Add(entity);
            this._unitOfWork.Db.SaveChanges();
@@ -88,7 +88,7 @@ namespace CarInventory.DataAccess.Infrastructure
             _unitOfWork.Db.Entry(entity).State = System.Data.Entity.EntityState.Modified;
             this._unitOfWork.Db.SaveChanges();
         }
-        public int Delete(T entity)
+        public Int64 Delete(T entity)
         {
             if (_unitOfWork.Db.Entry(entity).State == System.Data.Entity.EntityState.Detached)
             {
