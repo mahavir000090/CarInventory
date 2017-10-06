@@ -32,7 +32,7 @@ namespace CarInventory.Controllers
         // GET: Cars
         public PartialViewResult GetCar()
         {
-            var cars = CarRepo.GetAll(); 
+            var cars = CarRepo.GetAll().Where(x=>x.UserId==Convert.ToInt64(Session["UserID"])); 
             return PartialView("_CarPartial", cars);
         } 
        
@@ -40,25 +40,34 @@ namespace CarInventory.Controllers
         // POST: /Car/Create
 
         [HttpPost]
-        public ActionResult Create(Car car)
+        public ActionResult Create(CarViewModel car)
         {
             if(car.Id == 0)
             {
                 ModelState.Remove("Id");
             }
 
-            car.UserId = Convert.ToInt64(Session["UserID"]);
+            Car objCar = new Car();
+            objCar.Id = car.Id;
+            objCar.UserId = car.UserId;
+            objCar.Brand = car.Brand;
+            objCar.Model = car.Model;
+            objCar.Year = car.Year;
+            objCar.Price = car.Price;
+            objCar.New = car.New;
+
+            objCar.UserId = Convert.ToInt64(Session["UserID"]);
             if (ModelState.IsValid)
             {
                 car.UserId = Convert.ToInt64(Session["UserID"]);
                 if (car.Id > 0)
                 {
-                    CarRepo.Update(car);
+                    CarRepo.Update(objCar);
                 }
                 else {
-                    CarRepo.Insert(car);
+                    CarRepo.Insert(objCar);
                 } 
-                var cars = CarRepo.GetAll();
+                var cars = CarRepo.GetAll().Where(x => x.UserId == Convert.ToInt64(Session["UserID"]));;
                 return PartialView("_CarPartial", cars);
             }
 
@@ -84,7 +93,7 @@ namespace CarInventory.Controllers
             if (ModelState.IsValid)
             {
                 CarRepo.Delete(car);
-                var cars = CarRepo.GetAll();
+                var cars = CarRepo.GetAll().Where(x => x.UserId == Convert.ToInt64(Session["UserID"]));
                 return PartialView("_CarPartial", cars);
             }
             return View(car);
@@ -93,7 +102,7 @@ namespace CarInventory.Controllers
         // GET: Car Search
         public PartialViewResult GetSearchCar(string SearchString)
         {
-            var cars = CarRepo.GetAll();
+            var cars = CarRepo.GetAll().Where(x => x.UserId == Convert.ToInt64(Session["UserID"]));
             if (!String.IsNullOrEmpty(SearchString))
             {
                 cars = cars.Where(x => x.Brand.ToUpper().Contains(SearchString.ToUpper()) || x.Model.ToUpper().Contains(SearchString.ToUpper())).ToList();

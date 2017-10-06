@@ -2,6 +2,13 @@
 @{
     ViewBag.Title = "Index";
 }
+<style type="text/css">
+    .modal-footer {
+        padding:0px!important;
+        margin-top:0px!important;
+        border-top:none!important;
+    }
+</style>
 
 <h2>Index</h2>
 
@@ -9,13 +16,13 @@
     <span class="col-md-8"><a href="#myModal" role="button" class="btn" data-toggle="modal">Create</a></span>
     <div class="col-md-4" style="margin-bottom: 5px;">
         <div class="col-md-8">
-            <input type="text" id="txtSearch" class="form-control" placeholder="Search Here..." />
+            @Html.TextBox("SearchCar", "", new { @class= "form-control", @id= "txtSearch", @placeholder = "Search Here..." })
         </div>
         <div class="col-md-4">
             <input type="button" value="Search" id="btnSearch" class="btn btn-default" />
         </div>
-        
-        
+
+
     </div>
 </p>
 @if (!String.IsNullOrEmpty(Convert.ToString(TempData["Success"])))
@@ -39,39 +46,38 @@
                     Add New Car
                 </h4>
             </div>
-            @using (Html.BeginForm("", "", FormMethod.Post))
+
+            <div class='modal-body'>
+                @using (Html.BeginForm("", "", FormMethod.Post))
             {
-                <div class='modal-body'>
-                    <div class="form-group"> 
-                        <div class="col-md-10">
-                            @*@Html.HiddenFor(model => model.Id, new { id = "car_id" })*@
                             <input type="hidden" id="hdncarId" name="zyx" value="bar" />
-                        </div>
-                    </div>
                     <div class="form-group">
                         @Html.LabelFor(model => model.Brand, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
+                        <div class="col-md-10 RqurdField" style="margin-bottom:1%;">
                             @Html.EditorFor(model => model.Brand, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Brand, "", new { @class = "text-danger" })
+                            <span id="lblbrandError" class="text-danger" style="display:none;"> The Brand field is required.</span>
                         </div>
                     </div>
+
                     <div class="form-group">
                         @Html.LabelFor(model => model.Model, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
+                        <div class="col-md-10 RqurdField" style="margin-bottom:1%;">
                             @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Model, "", new { @class = "text-danger" })
+                            <span id="lblModelError" class ="text-danger" style="display:none;"> The Model field is required.</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.Year, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Year, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-10" style="margin-bottom:1%;">
+                            @Html.TextBoxFor(model => model.Year, new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Year, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-bottom:1%;">
                         @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
@@ -81,9 +87,10 @@
 
                     <div class="form-group">
                         @Html.LabelFor(model => model.New, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
+                        <div class="col-md-10" style="margin-bottom:1%;">
                             <div class="checkbox">
-                                @Html.EditorFor(model => model.New)
+                                @*@Html.EditorFor(model => model.New)*@
+                                @Html.CheckBox("New", new { @id="IsNew" })
                                 @Html.ValidationMessageFor(model => model.New, "", new { @class = "text-danger" })
                             </div>
                         </div>
@@ -94,11 +101,12 @@
 
                         </div>
                     </div>
-                </div>
-                <div class='modal-footer'>
-                    <input type="button" id="btnCreate" value="Save" class="btn btn-success" />   <button type='button' class='btn btn-danger' data-dismiss='modal'>Close</button>
-                </div>
-            }
+                    <div class='modal-footer'>
+                        <input type="button" id="btnCreate" value="Save" class="btn btn-success" />   <button type='button' id="btnClose" class='btn btn-danger' data-dismiss='modal'>Close</button>
+                    </div>
+                }
+            </div>
+
         </div>
     </div>
 </div>
@@ -123,14 +131,45 @@
     });
 
     $('#btnCreate').click(function () {
-        var model = { Id: $('#hdncarId').val(), Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
+        
+        //For Display Error Message
+        if ($('#Brand').val() == "" || $('#Model').val() == "") {
+            if ($('#Brand').val() == "")
+            { $("#lblbrandError").css("display", "block") } else {
+                $("#lblbrandError").css("display", "none")
+            }
+
+            if ($('#Model').val() == "")
+            { $("#lblModelError").css("display", "block") } else {
+                $("#lblModelError").css("display", "none")
+            }
+            return false;
+        }
+        var isNew = $('input[name="New"]:checked').length > 0;
+        var model = { Id: $('#hdncarId').val(), Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: isNew };
         SaveCarDetails(model);
     });
 
+    $('#btnClose').click(function () {
+        $("#lblbrandError").css("display", "none")
+        $("#lblModelError").css("display", "none")
+    });
+
+    //Remove Message When Value Insert In Textbox
+    $('.RqurdField').on('input', function (e) {
+        if ($('#Brand').val() == "")
+        { $("#lblbrandError").css("display", "block") } else {
+            $("#lblbrandError").css("display", "none")
+        }
+
+        if ($('#Model').val() == "")
+        { $("#lblModelError").css("display", "block") } else {
+            $("#lblModelError").css("display", "none")
+        }
+    });
 
 
-    function EditCar(Id)
-    {
+    function EditCar(Id) {
         console.log(Id);
         $.ajax({
             type: "Get",
@@ -144,26 +183,30 @@
             $('#Year').val(response.Year);
             $('#Price').val(response.Price);
             $('#New').val(response.New);
+            response.New == true ? $('#IsNew').prop('checked', true) : $('#IsNew').prop('checked', false);
+
             $('#myModal').modal('show');
         });
     }
 
     function DeleteCar(Id) {
-        console.log(Id);
-        var model = { Id: Id, Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
 
-        $.ajax({
-            type: "Post",
-            url: Deleteurl,
-            data: JSON.stringify(model),
-            contentType: "application/json"
-        }).done(function (res) {
-            $("#dvCars").html(res);
-        });
+        if (confirm('Are you sure you want to delete this record?')) {
+            var model = { Id: Id, Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
+            $.ajax({
+                type: "Post",
+                url: Deleteurl,
+                data: JSON.stringify(model),
+                contentType: "application/json"
+            }).done(function (res) {
+                $("#dvCars").html(res);
+            });
+        }
+
+        console.log(Id);
     }
 
-    function clearform()
-    {
+    function clearform() {
         $('#Brand').val('');
         $('#Model').val('');
         $('#Year').val('');
@@ -172,8 +215,7 @@
         $('#hdncarId').val('');
     }
 
-    function SaveCarDetails(model)
-    {
+    function SaveCarDetails(model) {
         $.ajax({
             type: "Post",
             url: url,
