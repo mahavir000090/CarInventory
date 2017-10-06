@@ -109,7 +109,5 @@ namespace CarInventory.DataAccess.Infrastructure
         {
             return dbSet.AsEnumerable().ToList();
         }
-
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CarInventory.DataAccess;
 using CarInventory.DataAccess.Infrastructure;
 using CarInventory.DataAccess.Infrastructure.Contract;
+using CarInventory.DataAccess.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,11 @@ namespace CarInventory.Controllers
         [HttpPost]
         public ActionResult Create(Car car)
         {
+            if(car.Id == 0)
+            {
+                ModelState.Remove("Id");
+            }
+
             car.UserId = Convert.ToInt64(Session["UserID"]);
             if (ModelState.IsValid)
             {
@@ -82,6 +88,18 @@ namespace CarInventory.Controllers
                 return PartialView("_CarPartial", cars);
             }
             return View(car);
+        }
+
+        // GET: Car Search
+        public PartialViewResult GetSearchCar(string SearchString)
+        {
+            var cars = CarRepo.GetAll();
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                cars = cars.Where(x => x.Brand.ToUpper().Contains(SearchString.ToUpper()) || x.Model.ToUpper().Contains(SearchString.ToUpper())).ToList();
+            }
+
+            return PartialView("_CarPartial", cars);
         }
     }
 }

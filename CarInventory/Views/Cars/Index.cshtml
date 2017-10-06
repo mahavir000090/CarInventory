@@ -6,7 +6,17 @@
 <h2>Index</h2>
 
 <p>
-    <a href="#myModal" role="button" class="btn" data-toggle="modal">Create</a>
+    <span class="col-md-8"><a href="#myModal" role="button" class="btn" data-toggle="modal">Create</a></span>
+    <div class="col-md-4" style="margin-bottom: 5px;">
+        <div class="col-md-8">
+            <input type="text" id="txtSearch" class="form-control" placeholder="Search Here..." />
+        </div>
+        <div class="col-md-4">
+            <input type="button" value="Search" id="btnSearch" class="btn btn-default" />
+        </div>
+        
+        
+    </div>
 </p>
 @if (!String.IsNullOrEmpty(Convert.ToString(TempData["Success"])))
 {
@@ -34,7 +44,8 @@
                 <div class='modal-body'>
                     <div class="form-group"> 
                         <div class="col-md-10">
-                            @Html.HiddenFor(model => model.Id, new { htmlAttributes = new { @class = "form-control" } }) 
+                            @*@Html.HiddenFor(model => model.Id, new { id = "car_id" })*@
+                            <input type="hidden" id="hdncarId" name="zyx" value="bar" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -95,6 +106,8 @@
 <script type="text/javascript">
     var url = "@Url.Action("Create","Cars")";
     var Geturl = "@Url.Action("GetCar","Cars")";
+    var GetSearchurl = "@Url.Action("GetSearchCar", "Cars")";
+    var Deleteurl = "@Url.Action("Delete", "Cars")";
 
     $(document).ready(function () {
         clearform();
@@ -110,7 +123,7 @@
     });
 
     $('#btnCreate').click(function () {
-        var model = { Id: $('#Id').val(), Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
+        var model = { Id: $('#hdncarId').val(), Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
         SaveCarDetails(model);
     });
 
@@ -121,21 +134,32 @@
         console.log(Id);
         $.ajax({
             type: "Get",
-            url: "@Url.Action("Edit", "Cars")" + "?Id=" + Id, 
+            url: "@Url.Action("Edit", "Cars")" + "?Id=" + Id,
             contentType: "application/json ; charset=utf-8"
         }).done(function (response) {
             //$('#Id').val(response.Id);
+            $('#hdncarId').val(response.Id);
             $('#Brand').val(response.Brand);
             $('#Model').val(response.Model);
             $('#Year').val(response.Year);
             $('#Price').val(response.Price);
             $('#New').val(response.New);
             $('#myModal').modal('show');
-        }); 
+        });
     }
 
     function DeleteCar(Id) {
         console.log(Id);
+        var model = { Id: Id, Brand: $('#Brand').val(), Model: $('#Model').val(), Year: $('#Year').val(), Price: $('#Price').val(), New: $('#New').val() };
+
+        $.ajax({
+            type: "Post",
+            url: Deleteurl,
+            data: JSON.stringify(model),
+            contentType: "application/json"
+        }).done(function (res) {
+            $("#dvCars").html(res);
+        });
     }
 
     function clearform()
@@ -145,6 +169,7 @@
         $('#Year').val('');
         $('#Price').val('');
         $('#New').val('');
+        $('#hdncarId').val('');
     }
 
     function SaveCarDetails(model)
@@ -160,5 +185,33 @@
             clearform();
         });
     }
+
+    //For instant search
+
+    //$('#txtSearch').on('input', function (e) {
+    //    var SearchString = $("#txtSearch").val();
+
+    //    $.ajax({
+    //        type: "Get",
+    //        url: GetSearchurl,
+    //        data: { SearchString: SearchString },
+    //        contentType: "application/json"
+    //    }).done(function (res) {
+    //        $("#dvCars").html(res);
+    //    });
+    //});
+
+    $('#btnSearch').click(function () {
+        var SearchString = $("#txtSearch").val();
+
+        $.ajax({
+            type: "Get",
+            url: GetSearchurl,
+            data: { SearchString: SearchString },
+            contentType: "application/json"
+        }).done(function (res) {
+            $("#dvCars").html(res);
+        });
+    });
 
 </script>
