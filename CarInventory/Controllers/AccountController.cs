@@ -88,6 +88,23 @@ namespace CarInventory.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+
+        // For Check Email Exist
+        [HttpGet]
+        public ActionResult CheckExistingEmail(string Email)
+        {
+            bool ifEmailExist = false;
+            try
+            {
+                var user = UserRepo.GetAll().Where(x => x.Email.ToLower() == Email.ToLower()).FirstOrDefault();
+                ifEmailExist = user != null ? true : false;
+                return Json(!ifEmailExist, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 
 }
